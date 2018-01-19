@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         animation.setImageResource(R.drawable.explosion);
         final AnimationDrawable explosionAnimation = (AnimationDrawable)animation.getDrawable();
 
+        //Listener method for the button triggering the explosion
         explosion_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 explosionAnimation.stop();
