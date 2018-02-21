@@ -20,10 +20,12 @@
             android:name=".shop"
             android:label="@string/title_activity_shop"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".game"
-            android:label="@string/title_activity_game"
+            android:label="game"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-    </application>
+
+</application>
 
 </manifest>
