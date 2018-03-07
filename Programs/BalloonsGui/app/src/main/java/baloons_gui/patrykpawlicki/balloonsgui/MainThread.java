@@ -22,6 +22,8 @@ public class MainThread extends Thread {
     private static int maxFPS = 30;
     public static Canvas gameCanvas;
 
+    private boolean isSurfaceLocked = false;
+
     MainThread(SurfaceHolder surfaceHolder, GameView gameView) {
         super();
         this.surfaceHolder = surfaceHolder;
@@ -31,6 +33,8 @@ public class MainThread extends Thread {
     public void setRunning(boolean running) {
         this.running = running;
     }
+
+    public boolean isSurfaceLocked() { return isSurfaceLocked; }
 
     @Override
     public void run() {
@@ -51,6 +55,7 @@ public class MainThread extends Thread {
 
             try {
                 gameCanvas = this.surfaceHolder.lockCanvas();
+                isSurfaceLocked = true;
                 synchronized (surfaceHolder) {
                     this.gameView.update();
                     gameView.draw(gameCanvas);
@@ -61,6 +66,7 @@ public class MainThread extends Thread {
                 if (gameCanvas != null) {
                     try {
                         surfaceHolder.unlockCanvasAndPost(gameCanvas);
+                        isSurfaceLocked = false;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

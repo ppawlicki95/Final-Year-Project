@@ -1,6 +1,8 @@
 package baloons_gui.patrykpawlicki.balloonsgui;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,16 +15,20 @@ import android.graphics.Rect;
 
 public class Balloon implements BalloonController {
 
+    private Context context;
+
     private Rect rectangle;
     private Bitmap bitmap;
     private int width, height;
 
     private int x, y;
+    private Point point;
     private int color;
     private boolean popped;
 
-    public Balloon(Rect rect, int color, int x, int y) {
-        //this.bitmap = bitmap;
+    public Balloon(Context context, Rect rect, int color, int x, int y) {
+        this.context = context;
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon);
         this.rectangle = rect;
         this.color = color;
         this.x = x;
@@ -30,11 +36,22 @@ public class Balloon implements BalloonController {
         popped = false;
     }
 
+    public Rect getRectangle() {
+        return rectangle;
+    }
+
+    public void updatePosition(int speed) {
+        rectangle.top -= speed;
+        rectangle.bottom -= speed;
+    }
+
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
+        paint.setColor(color);
         canvas.drawRect(rectangle, paint);
+
+        canvas.drawBitmap(bitmap, rectangle.left, rectangle.top, paint);
     }
 
     @Override

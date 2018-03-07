@@ -3,8 +3,6 @@ package baloons_gui.patrykpawlicki.balloonsgui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -18,17 +16,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String TAG = MainThread.class.getSimpleName();
     private MainThread thread;
-    private Balloon balloon;
-    private Point balloonPoint;
+    BalloonManager balloonManager;
+    //Balloon balloon;
 
     public GameView(Context context) {
         super(context);
         getHolder().addCallback(this);
         thread = new MainThread(getHolder(), this);
 
-        balloon = new Balloon(new Rect(250, 250, 500, 500), Color.RED, MainThread.SCREEN_WIDTH/2, MainThread.SCREEN_HEIGHT/2);
-        System.out.println("x: " + balloon.getX()  + " y: " + balloon.getY());
-        balloonPoint = new Point(balloon.getX(), balloon.getY());
+        balloonManager = new BalloonManager(context);
+
+        //balloon = new Balloon(context, new Rect(250, 250, 500, 500), Color.BLUE, 50, 50);
+        //System.out.println("x: " + balloon.getX()  + " y: " + balloon.getY());
+        //balloonPoint = new Point(balloon.getX(), balloon.getY());
         setFocusable(true);
     }
 
@@ -60,12 +60,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas gameCanvas){
         super.draw(gameCanvas);
-        gameCanvas.drawColor(Color.BLACK);
-        balloon.draw(gameCanvas);
+        gameCanvas.drawColor(Color.YELLOW);
+        //if (balloon != null)
+        //balloon.draw(gameCanvas);
+        balloonManager.draw(gameCanvas);
     }
 
     public void update() {
-        balloon.update(balloonPoint);
+        //if (balloonPoint != null)
+        //    balloon.update(balloonPoint);
+        balloonManager.update();
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -74,7 +78,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 case MotionEvent.ACTION_MOVE:
 
                     Log.d(TAG, "Touch Coords: x = " + event.getX() + ", y = " + event.getY());
-                    Log.d(TAG, "Balloon Coords: x = " + balloon.getX() + ", y = " + balloon.getY());
+                    Log.d(TAG, "List size: " + balloonManager.getBalloonsListSize());
+                    Log.d(TAG, "Spawn X: " + balloonManager.randX() + " Spawn Y: " + balloonManager.spawnY);
+                    Log.d(TAG, "XXXXX@: " + balloonManager.balloonCordX());
+
+                    balloonManager.generateBalloon();
             }
 
         /*if (event.getAction() == MotionEvent.ACTION_DOWN) {
