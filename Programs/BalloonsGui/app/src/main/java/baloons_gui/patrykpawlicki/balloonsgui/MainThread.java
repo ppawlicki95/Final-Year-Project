@@ -13,6 +13,8 @@ public class MainThread extends Thread {
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
 
+    public static int score = 0;
+
     private static final String TAG = MainThread.class.getSimpleName();
 
     private GameView gameView;

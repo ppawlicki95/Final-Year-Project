@@ -16,51 +16,46 @@ import android.graphics.Rect;
 public class Balloon implements BalloonController {
 
     private Context context;
-
-    private Rect rectangle;
+    private Circle circle;
     private Bitmap bitmap;
-    private int width, height;
 
     private int x, y;
-    private Point point;
     private int color;
     private boolean popped;
 
-    public Balloon(Context context, Rect rect, int color, int x, int y) {
+    public Balloon(Context context, int color, int x, int y, int radius) {
         this.context = context;
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon);
-        this.rectangle = rect;
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon2);
+        circle = new Circle(x, y, radius);
         this.color = color;
         this.x = x;
         this.y = y;
         popped = false;
     }
 
-    public Rect getRectangle() {
-        return rectangle;
-    }
+    public Circle getCircle() { return circle; }
 
     public void updatePosition(int speed) {
-        rectangle.top -= speed;
-        rectangle.bottom -= speed;
+        y -= speed;
+        circle.y -= speed;
     }
 
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(color);
-        canvas.drawRect(rectangle, paint);
 
-        canvas.drawBitmap(bitmap, rectangle.left, rectangle.top, paint);
+        canvas.drawBitmap(bitmap,
+                new Rect(0,0,bitmap.getWidth(),bitmap.getHeight()),
+                new Rect((circle.getX() - circle.radius),
+                        (circle.getY() - circle.radius),
+                        (circle.getX() + circle.radius),
+                        (circle.getY() + circle.radius)),
+                null);
     }
 
     @Override
     public void update() { }
-
-    @Override
-    public void update(Point point) {
-        rectangle.set(point.x - rectangle.width() / 2, point.y - rectangle.height() / 2, point.x + rectangle.width() / 2, point.y + rectangle.height() / 2);
-    }
 
     public Bitmap getBitmap() {
         return bitmap;
@@ -91,7 +86,7 @@ public class Balloon implements BalloonController {
     }
 
     public void setPopped(boolean popped) {
-        this.popped = popped;
+        this.popped = true;
     }
 
     public void handleTouchEvent(int x, int y) { }
