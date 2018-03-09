@@ -9,6 +9,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 
+import java.util.Random;
+
 /**
  * Created by Patryk Pawlicki on 02/02/2018.
  */
@@ -20,6 +22,7 @@ public class Balloon implements BalloonController {
     private Bitmap bitmap;
 
     private int x, y;
+    private int speed;
     private int color;
     private boolean popped;
 
@@ -27,6 +30,7 @@ public class Balloon implements BalloonController {
         this.context = context;
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon2);
         circle = new Circle(x, y, radius);
+        this.speed = 20 + randSpeed();
         this.color = color;
         this.x = x;
         this.y = y;
@@ -38,6 +42,12 @@ public class Balloon implements BalloonController {
     public void updatePosition(int speed) {
         y -= speed;
         circle.y -= speed;
+    }
+
+    public static int randSpeed(){
+        Random rand = new Random();
+        int randomSpeed = rand.nextInt(60);
+        return randomSpeed;
     }
 
     @Override
@@ -52,6 +62,15 @@ public class Balloon implements BalloonController {
                         (circle.getX() + circle.radius),
                         (circle.getY() + circle.radius)),
                 null);
+    }
+
+    public boolean handleTouchEvent(float x, float y) {
+        boolean collision = false;
+            if(x >= getX() - getCircle().radius && y >= getY() - getCircle().radius &&
+                    x <= getX() + getCircle().radius && y <= getY() + getCircle().radius){
+                collision = true;
+            }
+            return collision;
     }
 
     @Override
@@ -69,17 +88,19 @@ public class Balloon implements BalloonController {
         return x;
     }
 
+    public int getY() { return y; }
+
     public void setX(int x) {
         this.x = x;
-    }
-
-    public int getY() {
-        return y;
     }
 
     public void setY(int y) {
         this.y = y;
     }
+
+    public int getSpeed() { return speed; }
+
+    public void setSpeed(int speed) { this.speed = speed; }
 
     public boolean isPopped() {
         return popped;
@@ -88,7 +109,5 @@ public class Balloon implements BalloonController {
     public void setPopped(boolean popped) {
         this.popped = true;
     }
-
-    public void handleTouchEvent(int x, int y) { }
 
 }

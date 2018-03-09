@@ -21,7 +21,10 @@ public class BalloonManager {
         this.context = context;
         balloons = new ArrayList<>();
         startTime = System.currentTimeMillis();
-        balloons.add(new Balloon(context, Color.RED, 1000, 1000, 150 ));
+    }
+
+    public int getBalloonsListSize() {
+        return balloons.size();
     }
 
     public void generateBalloon() {
@@ -38,17 +41,11 @@ public class BalloonManager {
         int elapsedTime = (int) (System.currentTimeMillis() - startTime);
 
         for (Balloon b : balloons) {
-            b.updatePosition(20);  //TO IMPROVE : randomise speed in intervals instead of fixed speed
+            b.updatePosition(b.getSpeed());  //TO IMPROVE : randomise speed in intervals instead of fixed speed
                                             //     ADD : different speed bounds based on elapsedTime
-        }
-    }
-
-    public void handleTouchEvent(float x, float y) {
-        for (Balloon b : balloons) {
-            if(x >= b.getX() - b.getCircle().radius && y >= b.getY() - b.getCircle().radius &&
-                    x <= b.getX() + b.getCircle().radius && y <= b.getY() + b.getCircle().radius){
+            if (b.getY() < 0 - b.getCircle().radius) {
                 if (b.isPopped() != true)
-                    MainThread.score++;
+                    MainThread.lives--;
                 b.setPopped(true);
             }
         }
@@ -61,8 +58,14 @@ public class BalloonManager {
         }
     }
 
-    public int getBalloonsListSize() {
-        return balloons.size();
+    public void handleTouchEvent(float x, float y) {
+        for (Balloon b : balloons) {
+            if (b.handleTouchEvent(x, y) == true) {
+                if (b.isPopped() != true)
+                    MainThread.score++;
+                b.setPopped(true);
+                //break;
+            }
+        }
     }
-
 }

@@ -14,6 +14,7 @@ public class MainThread extends Thread {
     public static int SCREEN_HEIGHT;
 
     public static int score = 0;
+    public static int lives = 3;
 
     private static final String TAG = MainThread.class.getSimpleName();
 

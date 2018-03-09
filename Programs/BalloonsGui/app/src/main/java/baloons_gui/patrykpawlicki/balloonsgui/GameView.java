@@ -62,6 +62,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         score.setTextSize(100);
         score.setColor(Color.WHITE);
         gameCanvas.drawText("Score: " + thread.score, 50, 100, score);
+
+        Paint lives = new Paint();
+        lives.setTextSize(100);
+        lives.setColor(Color.WHITE);
+        gameCanvas.drawText("Lives: " + thread.lives, MainThread.SCREEN_WIDTH/2 + 180, 100, score);
     }
 
     public void update() {
@@ -71,7 +76,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
             switch(event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                case MotionEvent.ACTION_MOVE:
 
                     Log.d(TAG, "Touch Coords: x = " + event.getX() + ", y = " + event.getY());
                     Log.d(TAG, "List size: " + balloonManager.getBalloonsListSize());
