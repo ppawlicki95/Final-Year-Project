@@ -26,30 +26,59 @@ public class Balloon implements BalloonController {
     private int color;
     private boolean popped;
 
-    public Balloon(Context context, int color, int x, int y, int radius) {
+    /**
+     * Constructor for the balloon object.
+     * @param context - interface which allows access to resources and states, required for the object to work with the GameView.
+     * @param color - colour of the paint for the primitive object corresponding to the balloon on screen
+     * @param x - object X coordinate used for generating the circle which balloons are based on
+     * @param y - object Y coordinate used for generating the circle which balloons are based on
+     * @param radius - radius of the circle object corresponding to the balloon
+     * @param elapsedTime - elapsed time since the start of the game
+     */
+    public Balloon(Context context, int color, int x, int y, int radius, int elapsedTime) {
         this.context = context;
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon2);
         circle = new Circle(x, y, radius);
-        this.speed = 20 + randSpeed();
+        this.speed = 20 + elapsedTime/4 + randSpeed(elapsedTime);
         this.color = color;
         this.x = x;
         this.y = y;
         popped = false;
     }
 
+    /**
+     * Method which returns the circle object.
+     * @return  - circle object
+     */
     public Circle getCircle() { return circle; }
 
+    /**
+     * Method used for updating the balloon position on the screen.
+     * Decrements the Y coordinate of the balloon object as well as the corresponding circle.
+     * @param speed - variable which determines the movement speed of the object on screen
+     */
     public void updatePosition(int speed) {
         y -= speed;
         circle.y -= speed;
     }
 
-    public static int randSpeed(){
+    /**
+     * Method for generating a random movement speed for the balloon object.
+     * @param elapsedTime - time elapsed since the start of the game
+     * @return randomSpeed integer
+     */
+    public static int randSpeed(int elapsedTime){
+        if(elapsedTime >= 60) {elapsedTime = 60;}
         Random rand = new Random();
-        int randomSpeed = rand.nextInt(60);
+        int randomSpeed = rand.nextInt(elapsedTime);
         return randomSpeed;
     }
 
+    /**
+     * Draw method for the balloon object. Draws the appropriate bitmap as well as circle object
+     * on canvas which is taken as a method parameter.
+     * @param canvas - canvas object which the object will be drawn on
+     */
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
@@ -64,6 +93,13 @@ public class Balloon implements BalloonController {
                 null);
     }
 
+    /**
+     * Touch event handler for the balloon object. Responsible for detection whether the
+     * click event has taken place within the boundaries of the object.
+     * @param x - X coordinate of the click event
+     * @param y - Y coordinate of the click event
+     * @return collision boolean, true if collision within object radius, false otherwise
+     */
     public boolean handleTouchEvent(float x, float y) {
         boolean collision = false;
             if(x >= getX() - getCircle().radius && y >= getY() - getCircle().radius &&
@@ -76,36 +112,77 @@ public class Balloon implements BalloonController {
     @Override
     public void update() { }
 
+    /**
+     * Getter for the balloon bitmap
+     * @return bitmap graphic for the balloon object
+     */
     public Bitmap getBitmap() {
         return bitmap;
     }
 
+    /**
+     * Setter for the balloon bitmap
+     * @param bitmap - graphic used for the balloon object
+     */
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
     }
 
+    /**
+     * Getter for the X coordinate of the balloon object
+     * @return X coordinate of the balloon object
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Getter for the Y coordinate of the balloon object
+     * @return Y coordinate of the balloon object
+     */
     public int getY() { return y; }
 
+    /**
+     * Setter for the X coordinate of the balloon object
+     * @param x - X coordinate of the balloon object
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     * Setter for the X coordinate of the balloon object
+     * @param y - Y coordinate of the balloon object
+     */
     public void setY(int y) {
         this.y = y;
     }
 
+    /**
+     * Getter for the speed of the balloon object
+     * @return speed of the balloon object
+     */
     public int getSpeed() { return speed; }
 
+    /**
+     *Setter for the speed of the balloon object
+     * @param speed - speed for the balloon object
+     */
     public void setSpeed(int speed) { this.speed = speed; }
 
+    /**
+     * Method to check whether the balloon is popped
+     * @return true if balloon is popped, false otherwise
+     */
     public boolean isPopped() {
         return popped;
     }
 
+    /**
+     * Setter for the popped variable of the balloon object
+     * @param popped - boolean to check if balloon has been popped
+     *               (popped balloons don't draw on screen)
+     */
     public void setPopped(boolean popped) {
         this.popped = true;
     }

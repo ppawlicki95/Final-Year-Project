@@ -80,7 +80,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     Log.d(TAG, "Touch Coords: x = " + event.getX() + ", y = " + event.getY());
                     Log.d(TAG, "List size: " + balloonManager.getBalloonsListSize());
 
-                    balloonManager.generateBalloon();
+                    //balloonManager.generateBalloon();
 
                     balloonManager.handleTouchEvent(event.getX(), event.getY());
             }

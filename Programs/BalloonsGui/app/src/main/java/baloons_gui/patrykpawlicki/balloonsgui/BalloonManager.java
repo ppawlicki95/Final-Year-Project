@@ -3,6 +3,7 @@ package baloons_gui.patrykpawlicki.balloonsgui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,20 +16,34 @@ public class BalloonManager {
     private Context context;
     private ArrayList<Balloon> balloons;
     private long startTime;
-    int spawnY = MainThread.SCREEN_HEIGHT + 200;
+    private long spawnTime;
+
+    private static final String TAG = MainThread.class.getSimpleName();
 
     public BalloonManager(Context context) {
         this.context = context;
         balloons = new ArrayList<>();
         startTime = System.currentTimeMillis();
+        spawnTime = (int) (System.currentTimeMillis() - startTime) /1000;
     }
 
     public int getBalloonsListSize() {
         return balloons.size();
     }
 
-    public void generateBalloon() {
-        balloons.add(new Balloon(context, Color.RED, randX(), spawnY, 150 ));
+    public void generateBalloon(int elapsedTime) {
+        if (elapsedTime <= 30) {
+            balloons.add(new Balloon(context, Color.RED, randX(), randY(), 150, elapsedTime));
+        } else if (elapsedTime > 30 && elapsedTime <= 60) {
+            balloons.add(new Balloon(context, Color.RED, randX(), randY(), 150, elapsedTime));
+            balloons.add(new Balloon(context, Color.RED, randX(), randY(), 150, elapsedTime));
+        } else if (elapsedTime > 60) {
+            balloons.add(new Balloon(context, Color.RED, randX(), randY(), 150, elapsedTime));
+            balloons.add(new Balloon(context, Color.RED, randX(), randY(), 150, elapsedTime));
+            balloons.add(new Balloon(context, Color.RED, randX(), randY(), 150, elapsedTime));
+            balloons.add(new Balloon(context, Color.RED, randX(), randY(), 150, elapsedTime));
+        }
+
     }
     
     public static int randX(){
@@ -37,12 +52,27 @@ public class BalloonManager {
         return randomNum;
     }
 
-    public void update() {
-        int elapsedTime = (int) (System.currentTimeMillis() - startTime);
+    public static int randY() {
+        Random rand = new Random();
+        int randomNum = rand.nextInt(600) + MainThread.SCREEN_HEIGHT + 500;
+        return randomNum;
+    }
 
-        for (Balloon b : balloons) {
-            b.updatePosition(b.getSpeed());  //TO IMPROVE : randomise speed in intervals instead of fixed speed
-                                            //     ADD : different speed bounds based on elapsedTime
+    public void update() {
+        int elapsedTime = ((int) (System.currentTimeMillis() - startTime) /1000);
+        Log.d(TAG, "Elapsed time: " + elapsedTime);
+        //Log.d(TAG, "Spawn time: " + spawnTime);
+
+        if (elapsedTime > spawnTime + 1) {
+            generateBalloon(elapsedTime);
+            Log.d(TAG, "generateBalloon()");
+            Log.d(TAG, " Number of balloons: " + balloons.size());
+            spawnTime = spawnTime + 2;
+        }
+
+        for(Balloon b : balloons) {
+            b.updatePosition(b.getSpeed());
+
             if (b.getY() < 0 - b.getCircle().radius) {
                 if (b.isPopped() != true)
                     MainThread.lives--;
