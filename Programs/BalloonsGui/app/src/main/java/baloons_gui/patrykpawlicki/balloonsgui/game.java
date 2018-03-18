@@ -1,6 +1,7 @@
 package baloons_gui.patrykpawlicki.balloonsgui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,7 +16,4 @@ public class game extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(new GameView(this));
     }
-
-
-
 }

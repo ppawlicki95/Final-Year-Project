@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent nav_game = new Intent(MainActivity.this, game.class);
+                MainThread.gameOver = false;
                 startActivity(nav_game);
             }
         });

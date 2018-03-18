@@ -24,6 +24,7 @@ public class MainThread extends Thread {
     private long FPS = 0;
     private static int maxFPS = 30;
     public static Canvas gameCanvas;
+    public static boolean gameOver = false;
 
     private boolean isSurfaceLocked = false;
 
@@ -49,7 +50,7 @@ public class MainThread extends Thread {
         long targetTime = 1000 / maxFPS;
         long loopcount = 0L;
 
-        Log.d(TAG, "Starting game loop");
+        //Log.d(TAG, "Starting game loop");
 
         while (running) {
             startTime = System.nanoTime();
@@ -93,6 +94,6 @@ public class MainThread extends Thread {
                 System.out.println("FPS: " + FPS);
             }
         }
-        Log.d(TAG, "Game loop finished, loop executed " + loopcount + " times.");
+        //Log.d(TAG, "Game loop finished, loop executed " + loopcount + " times.");
     }
 }
