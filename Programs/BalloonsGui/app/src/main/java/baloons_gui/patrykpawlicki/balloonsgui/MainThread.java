@@ -15,6 +15,7 @@ public class MainThread extends Thread {
 
     public static int score = 0;
     public static int lives = 3;
+     public static boolean muted = false;
 
     private static final String TAG = MainThread.class.getSimpleName();
 

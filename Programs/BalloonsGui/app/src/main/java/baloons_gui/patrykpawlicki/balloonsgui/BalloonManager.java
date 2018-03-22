@@ -3,7 +3,11 @@ package baloons_gui.patrykpawlicki.balloonsgui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -22,7 +26,8 @@ public class BalloonManager {
     private long spawnTime;
     public int spawnRounds;
 
-    MediaPlayer mp;
+    SoundPool snd;
+    int pop_sound;
 
     private static final String TAG = MainThread.class.getSimpleName();
 
@@ -34,6 +39,22 @@ public class BalloonManager {
         spawnTime = (int) (System.currentTimeMillis() - startTime) /1000;
         MainThread.score = 0;
         MainThread.lives = 3;
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            AudioAttributes aa = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .build();
+
+            snd = new SoundPool.Builder()
+                    .setMaxStreams(10)
+                    .setAudioAttributes(aa)
+                    .build();
+            pop_sound = snd.load(context, R.raw.pop_sound, 1);
+        } else {
+            snd = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
+            pop_sound = snd.load(context, R.raw.pop_sound, 1);
+        }
     }
 
     public int getBalloonsListSize() {
@@ -103,10 +124,12 @@ public class BalloonManager {
     public void handleTouchEvent(float x, float y) {
         for (Balloon b : balloons) {
             if (b.handleTouchEvent(x, y) == true) {
-                if (b.isPopped() != true)
+                if (b.isPopped() != true) {
                     MainThread.score++;
-                b.setPopped(true);
-                //break;
+                    b.setPopped(true);
+                    if (!MainThread.muted)
+                        snd.play(pop_sound, 1, 1, 1, 0, 1);
+                }
             }
         }
     }

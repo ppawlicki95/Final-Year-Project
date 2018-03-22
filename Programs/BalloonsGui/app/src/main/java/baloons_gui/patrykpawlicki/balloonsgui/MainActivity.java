@@ -1,6 +1,7 @@
 package baloons_gui.patrykpawlicki.balloonsgui;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -51,6 +52,22 @@ public class MainActivity extends AppCompatActivity {
                 Intent nav_game = new Intent(MainActivity.this, game.class);
                 MainThread.gameOver = false;
                 startActivity(nav_game);
+            }
+        });
+
+        //Mute button listener and OnClick method
+        final ImageView mute_btn = (ImageView)findViewById(R.id.mute_btn);
+        mute_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!MainThread.muted) {
+                    MainThread.muted = true;
+                    findViewById(R.id.mute_btn2).setVisibility(View.VISIBLE);
+                } else {
+                    MainThread.muted = false;
+                    findViewById(R.id.mute_btn2).setVisibility(View.INVISIBLE);
+                }
+
             }
         });
     }

@@ -37,13 +37,30 @@ public class Balloon implements BalloonController {
      */
     public Balloon(Context context, int color, int x, int y, int radius, int elapsedTime) {
         this.context = context;
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon2);
+        bitmap = randomColour();
         circle = new Circle(x, y, radius);
         this.speed = 20 + elapsedTime/4 + randSpeed(elapsedTime);
         this.color = color;
         this.x = x;
         this.y = y;
         popped = false;
+    }
+
+    public Bitmap randomColour() {
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_red);
+        Random rand = new Random();
+        int randomNum = rand.nextInt(4);
+
+        if(randomNum == 0) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_red);
+        } else if(randomNum == 1) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_blue);
+        } else if(randomNum == 2) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_green);
+        } else if(randomNum == 3) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_yellow);
+        }
+        return bitmap;
     }
 
     /**
