@@ -14,6 +14,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Patryk Pawlicki on 28/02/2018.
@@ -21,10 +22,11 @@ import java.util.Random;
 
 public class BalloonManager {
     private Context context;
-    private ArrayList<Balloon> balloons;
+    private CopyOnWriteArrayList<Balloon> balloons;
     private long startTime;
     private long spawnTime;
     public int spawnRounds;
+    public long gameEndTime;
 
     SoundPool snd;
     int pop_sound;
@@ -33,7 +35,7 @@ public class BalloonManager {
 
     public BalloonManager(Context context) {
         this.context = context;
-        balloons = new ArrayList<>();
+        balloons = new CopyOnWriteArrayList<>();
 
         startTime = System.currentTimeMillis();
         spawnTime = (int) (System.currentTimeMillis() - startTime) /1000;
@@ -67,20 +69,20 @@ public class BalloonManager {
         else if (elapsedTime > 60) { spawnRounds = 3; }
 
         for (int i = 0; i < spawnRounds; i++) {
-            balloons.add(new Balloon(context, Color.RED, randX(), randY(), 200, elapsedTime));
+            balloons.add(new Balloon(context, Color.RED, randX(), randY(), MainThread.SCREEN_WIDTH/5, elapsedTime));
         }
 
     }
     
     public static int randX(){
         Random rand = new Random();
-        int randomNum = rand.nextInt(MainThread.SCREEN_WIDTH - 100);
+        int randomNum = rand.nextInt(MainThread.SCREEN_WIDTH - MainThread.SCREEN_WIDTH/10);
         return randomNum;
     }
 
     public static int randY() {
         Random rand = new Random();
-        int randomNum = rand.nextInt(800) + MainThread.SCREEN_HEIGHT + 500;
+        int randomNum = rand.nextInt(MainThread.SCREEN_HEIGHT/4) + MainThread.SCREEN_HEIGHT + MainThread.SCREEN_HEIGHT/4;
         return randomNum;
     }
 
@@ -109,6 +111,7 @@ public class BalloonManager {
                     MainThread.gameOver = true;
                     balloons.clear();
                     balloons = null;
+                    gameEndTime = System.currentTimeMillis();
                 }
             }
         }
@@ -132,5 +135,9 @@ public class BalloonManager {
                 }
             }
         }
+    }
+
+    public long getStartTime() {
+        return startTime;
     }
 }
