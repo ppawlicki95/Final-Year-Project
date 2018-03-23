@@ -81,14 +81,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             Paint gameOver_score = new Paint();
             gameOver_score.setTextSize(MainThread.SCREEN_WIDTH / 10);
             gameOver_score.setColor(Color.WHITE);
-            gameCanvas.drawText("" + thread.score, MainThread.SCREEN_WIDTH/20 *9, MainThread.SCREEN_HEIGHT/20 *14, gameOver_score);
+            gameCanvas.drawText("You scored: " + thread.score, MainThread.SCREEN_WIDTH/100 *20, MainThread.SCREEN_HEIGHT/100 *75, gameOver_score);
 
             long timeInGameSeconds = (balloonManager.gameEndTime - balloonManager.getStartTime()) / 1000;
             String timeInGame = DateUtils.formatElapsedTime(timeInGameSeconds);
             Paint gameOver_time = new Paint();
             gameOver_time.setTextSize(MainThread.SCREEN_WIDTH / 10);
             gameOver_time.setColor(Color.WHITE);
-            gameCanvas.drawText("" + timeInGame, MainThread.SCREEN_WIDTH/100 *40, MainThread.SCREEN_HEIGHT/100 *87, gameOver_score);
+            gameCanvas.drawText("Time played: " + timeInGame, MainThread.SCREEN_WIDTH/100 *10, MainThread.SCREEN_HEIGHT/100 *85, gameOver_score);
         }
     }
 
@@ -103,7 +103,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
                     //Log.d(TAG, "Touch Coords: x = " + event.getX() + ", y = " + event.getY());
                     //Log.d(TAG, "List size: " + balloonManager.getBalloonsListSize());
-                    MainThread.lives--;
                     //balloonManager.generateBalloon();
                     if (!MainThread.gameOver) {
                         balloonManager.handleTouchEvent(event.getX(), event.getY());
