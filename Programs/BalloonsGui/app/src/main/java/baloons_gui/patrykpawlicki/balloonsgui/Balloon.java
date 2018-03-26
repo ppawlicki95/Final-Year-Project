@@ -4,9 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 
 import java.util.Random;
@@ -24,6 +21,7 @@ public class Balloon implements BalloonController {
     private int x, y;
     private int speed;
     private boolean popped;
+    private BalloonType type;
 
     /**
      * Constructor for the balloon object.
@@ -33,9 +31,10 @@ public class Balloon implements BalloonController {
      * @param radius - radius of the circle object corresponding to the balloon
      * @param elapsedTime - elapsed time since the start of the game
      */
-    public Balloon(Context context, int x, int y, int radius, int elapsedTime) {
+    public Balloon(Context context, BalloonType type, int x, int y, int radius, int elapsedTime) {
         this.context = context;
-        bitmap = randomColour();
+        this.type = type;
+        bitmap = setBalloonColour();
         circle = new Circle(x, y, radius);
         this.speed = 20 + elapsedTime/4 + randSpeed(elapsedTime);
         this.x = x;
@@ -43,8 +42,9 @@ public class Balloon implements BalloonController {
         popped = false;
     }
 
-    public Bitmap randomColour() {
+    public Bitmap setBalloonColour() {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_red);
+
         Random rand = new Random();
         int randomNum = rand.nextInt(4);
 
@@ -56,6 +56,11 @@ public class Balloon implements BalloonController {
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_green);
         } else if(randomNum == 3) {
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_yellow);
+        }
+        if(type == BalloonType.BLACK) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_black);
+        } else if (type == BalloonType.RAINBOW) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_rainbow);
         }
         return bitmap;
     }
@@ -193,6 +198,20 @@ public class Balloon implements BalloonController {
      */
     public void setPopped(boolean popped) {
         this.popped = true;
+    }
+
+    public BalloonType getType() {
+        return type;
+    }
+
+    public void setTypeBlack() {
+        type = BalloonType.BLACK;
+        setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_black));
+    }
+
+    public void setTypeStandard() {
+        type = BalloonType.STANDARD;
+        setBitmap(setBalloonColour());
     }
 
 }

@@ -22,7 +22,7 @@ public class BalloonManager {
     public long gameEndTime;
 
     SoundPool snd;
-    int pop_sound;
+    int pop_sound, beep_sound, rainbow_sound;
 
     private static final String TAG = MainThread.class.getSimpleName();
 
@@ -46,9 +46,14 @@ public class BalloonManager {
                     .setAudioAttributes(aa)
                     .build();
             pop_sound = snd.load(context, R.raw.pop_sound, 1);
+            beep_sound = snd.load(context, R.raw.beep_sound, 1);
+            rainbow_sound = snd.load(context, R.raw.rainbow_sound, 1);
         } else {
             snd = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
             pop_sound = snd.load(context, R.raw.pop_sound, 1);
+            beep_sound = snd.load(context, R.raw.beep_sound, 1);
+            rainbow_sound = snd.load(context, R.raw.rainbow_sound, 1);
+
         }
     }
 
@@ -61,8 +66,14 @@ public class BalloonManager {
         else if (elapsedTime > 30 && elapsedTime <= 60) { spawnRounds = 2; }
         else if (elapsedTime > 60) { spawnRounds = 3; }
 
+        if ((elapsedTime % 10 == 0)) {
+            balloons.add(new Balloon(context, BalloonType.BLACK, x, y, radius, elapsedTime));
+        } else if ((elapsedTime % 35 ==0)){
+            balloons.add(new Balloon(context, BalloonType.RAINBOW, x, y, radius, elapsedTime));
+        }
+
         for (int i = 0; i < spawnRounds; i++) {
-            balloons.add(new Balloon(context, x, y, radius, elapsedTime));
+            balloons.add(new Balloon(context, BalloonType.STANDARD, x, y, radius, elapsedTime));
         }
     }
     
@@ -81,19 +92,12 @@ public class BalloonManager {
     public void update() {
         if (!MainThread.gameOver) {
             int elapsedTime = ((int) (System.currentTimeMillis() - startTime) / 1000);
-            //Log.d(TAG, "Elapsed time: " + elapsedTime);
-            //Log.d(TAG, "Spawn time: " + spawnTime);
-
             if (elapsedTime > spawnTime + 1) {
                 generateBalloon(context, randX(), randY(), MainThread.SCREEN_WIDTH/5, elapsedTime);
-                //Log.d(TAG, "generateBalloon()");
-                //Log.d(TAG, " Number of balloons: " + balloons.size());
                 spawnTime++;
             }
-
             for (Balloon b : balloons) {
                 b.updatePosition(b.getSpeed());
-
                 if (b.getY() < 0 - b.getCircle().radius) {
                     if (b.isPopped() != true)
                         MainThread.lives--;
@@ -120,10 +124,22 @@ public class BalloonManager {
         for (Balloon b : balloons) {
             if (b.handleTouchEvent(x, y) == true) {
                 if (b.isPopped() != true) {
-                    MainThread.score++;
-                    b.setPopped(true);
-                    if (!MainThread.muted)
-                        snd.play(pop_sound, 1, 1, 1, 0, 1);
+                    if (b.getType() == BalloonType.BLACK) {
+                        if (!MainThread.muted)
+                            snd.play(beep_sound, 1, 1, 1, 0, 1);
+                        b.setTypeStandard();
+                    } else if (b.getType() == BalloonType.RAINBOW) {
+                        b.setPopped(true);
+                        MainThread.score = MainThread.score + 20;
+                        if (MainThread.lives < 3) {MainThread.lives++;}
+                        if (!MainThread.muted)
+                            snd.play(rainbow_sound, 1, 1, 1, 0, 1);
+                    } else {
+                        MainThread.score++;
+                        b.setPopped(true);
+                        if (!MainThread.muted)
+                            snd.play(pop_sound, 1, 1, 1, 0, 1);
+                    }
                 }
             }
         }
