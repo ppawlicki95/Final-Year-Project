@@ -14,12 +14,20 @@ import android.view.SurfaceView;
  * Created by Patryk Pawlicki on 26/01/2018.
  */
 
+/**
+ * The GamePanel class is responsible for what goes on the screen
+ * all of the objects and text paint is called and updated from here
+ */
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String TAG = MainThread.class.getSimpleName();
     private MainThread thread;
     BalloonManager balloonManager;
 
+    /**
+     * GamePanel constructor
+     * @param context - interface which allows access to resources and states
+     */
     public GamePanel(Context context) {
         super(context);
         getHolder().addCallback(this);
@@ -52,6 +60,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * Method responsible for drawing all of the objects and paint to the screen
+     * @param gameCanvas - the game canvas for the graphics
+     */
     @Override
     public void draw(Canvas gameCanvas) {
         super.draw(gameCanvas);
@@ -68,15 +80,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * Method which calls the appropriate objects' update methods
+     */
     public void update() {
         if (!MainThread.gameOver)
             balloonManager.update();
     }
 
+    /**
+     * Method which notified the BalloonManager whether a touch event collided with an object
+     * @param event - touch event
+     * @return boolean which is true when collision occured, false otherwise
+     */
     public boolean onTouchEvent(MotionEvent event) {
             switch(event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    //Log.d(TAG, "Touch Coords: x = " + event.getX() + ", y = " + event.getY());
                     if (!MainThread.gameOver) {
                         balloonManager.handleTouchEvent(event.getX(), event.getY());
                     }
@@ -84,6 +103,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         return true;
     }
 
+    /**
+     * Method which contains all of the code responsible for drawing the game text paint
+     * such as the score, lives during the game
+     * @param canvas
+     */
     public void drawGamePaint(Canvas canvas) {
         Paint score = new Paint();
         score.setTextSize(MainThread.SCREEN_WIDTH / 15);
@@ -100,6 +124,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 MainThread.SCREEN_HEIGHT/20 *1, lives);
     }
 
+    /**
+     * Method which contains all of the code responsible for drawing the game text paint
+     * such as the score or elapsed time after the player looses a game (Game over screen)
+     * @param canvas
+     * @param score
+     * @param timeInGame
+     */
     public void drawGameOverPaint(Canvas canvas, int score, String timeInGame) {
         Drawable gameOver = getResources().getDrawable(R.drawable.game_over);
         gameOver.setBounds(getLeft(), getTop(), getRight(), getBottom());
@@ -120,6 +151,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 MainThread.SCREEN_HEIGHT/100 *85, gameOver_score);
     }
 
+    /**
+     * Method which updates the highscores table after a game if score is higher
+     * than the current highscores stored
+     * @param newScore
+     * @param timeInGame
+     */
     public void updateHighscores(int newScore, String timeInGame) {
         if (newScore > highscores.highscore3 &&
                 newScore < highscores.highscore2 &&
