@@ -29,18 +29,16 @@ public class Balloon implements BalloonController {
     /**
      * Constructor for the balloon object.
      * @param context - interface which allows access to resources and states, required for the object to work with the GameView.
-     * @param color - colour of the paint for the primitive object corresponding to the balloon on screen
      * @param x - object X coordinate used for generating the circle which balloons are based on
      * @param y - object Y coordinate used for generating the circle which balloons are based on
      * @param radius - radius of the circle object corresponding to the balloon
      * @param elapsedTime - elapsed time since the start of the game
      */
-    public Balloon(Context context, int color, int x, int y, int radius, int elapsedTime) {
+    public Balloon(Context context, int x, int y, int radius, int elapsedTime) {
         this.context = context;
         bitmap = randomColour();
         circle = new Circle(x, y, radius);
         this.speed = 20 + elapsedTime/4 + randSpeed(elapsedTime);
-        this.color = color;
         this.x = x;
         this.y = y;
         popped = false;

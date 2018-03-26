@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="baloons_gui.patrykpawlicki.balloonsgui.shop">
+    tools:context="baloons_gui.patrykpawlicki.balloonsgui.highscores">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -13,6 +13,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_shop" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_highscores" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".shop"
-            android:label="@string/title_activity_shop"
+            android:name=".highscores"
+            android:label="highscores"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity

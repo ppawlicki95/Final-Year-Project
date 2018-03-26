@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         shop_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent nav_shop = new Intent(MainActivity.this, shop.class);
+                Intent nav_shop = new Intent(MainActivity.this, highscores.class);
                 startActivity(nav_shop);
             }
         });

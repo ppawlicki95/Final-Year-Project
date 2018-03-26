@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">BalloonsGui</string>
-    <string name="title_activity_shop">shop</string>
+    <string name="title_activity_shop">highscores</string>
     <string name="title_activity_game">game</string>
 </resources>

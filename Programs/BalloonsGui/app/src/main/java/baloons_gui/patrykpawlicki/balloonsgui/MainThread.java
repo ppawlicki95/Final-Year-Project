@@ -1,7 +1,6 @@
  package baloons_gui.patrykpawlicki.balloonsgui;
 
  import android.graphics.Canvas;
- import android.util.Log;
  import android.view.SurfaceHolder;
 
  /**
@@ -15,11 +14,11 @@ public class MainThread extends Thread {
 
     public static int score = 0;
     public static int lives = 3;
-     public static boolean muted = false;
+    public static boolean muted = false;
 
     private static final String TAG = MainThread.class.getSimpleName();
 
-    private GameView gameView;
+    private GamePanel gamePanel;
     private SurfaceHolder surfaceHolder;
     private boolean running;
     private long FPS = 0;
@@ -29,10 +28,10 @@ public class MainThread extends Thread {
 
     private boolean isSurfaceLocked = false;
 
-    MainThread(SurfaceHolder surfaceHolder, GameView gameView) {
+    MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel) {
         super();
         this.surfaceHolder = surfaceHolder;
-        this.gameView = gameView;
+        this.gamePanel = gamePanel;
     }
 
     public void setRunning(boolean running) {
@@ -62,8 +61,8 @@ public class MainThread extends Thread {
                 gameCanvas = this.surfaceHolder.lockCanvas();
                 isSurfaceLocked = true;
                 synchronized (surfaceHolder) {
-                    this.gameView.update();
-                    gameView.draw(gameCanvas);
+                    this.gamePanel.update();
+                    gamePanel.draw(gameCanvas);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

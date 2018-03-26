@@ -63,13 +63,13 @@ public class BalloonManager {
         return balloons.size();
     }
 
-    public void generateBalloon(int elapsedTime) {
+    public void generateBalloon(Context context, int x, int y, int radius, int elapsedTime) {
         if (elapsedTime <= 30) { spawnRounds = 1; }
         else if (elapsedTime > 30 && elapsedTime <= 60) { spawnRounds = 2; }
         else if (elapsedTime > 60) { spawnRounds = 3; }
 
         for (int i = 0; i < spawnRounds; i++) {
-            balloons.add(new Balloon(context, Color.RED, randX(), randY(), MainThread.SCREEN_WIDTH/5, elapsedTime));
+            balloons.add(new Balloon(context, x, y, radius, elapsedTime));
         }
 
     }
@@ -93,7 +93,7 @@ public class BalloonManager {
             //Log.d(TAG, "Spawn time: " + spawnTime);
 
             if (elapsedTime > spawnTime + 1) {
-                generateBalloon(elapsedTime);
+                generateBalloon(context, randX(), randY(), MainThread.SCREEN_WIDTH/5, elapsedTime);
                 //Log.d(TAG, "generateBalloon()");
                 //Log.d(TAG, " Number of balloons: " + balloons.size());
                 spawnTime++;
