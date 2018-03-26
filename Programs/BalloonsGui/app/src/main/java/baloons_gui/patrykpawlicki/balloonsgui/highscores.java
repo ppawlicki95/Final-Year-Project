@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * Class responsible for displaying and updating the Highscores
+ */
 public class highscores extends AppCompatActivity {
 
     public static int highscore1, highscore2, highscore3;
@@ -78,7 +81,6 @@ public class highscores extends AppCompatActivity {
                 time1.setText(String.valueOf(preferences.getString("time1", "0:00")));
                 time2.setText(String.valueOf(preferences.getString("time2", "0:00")));
                 time3.setText(String.valueOf(preferences.getString("time3", "0:00")));
-                //setContentView(R.layout.activity_highscores);
             }
         });
     }

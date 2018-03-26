@@ -7,7 +7,10 @@
  * Created by Patryk Pawlicki on 26/01/2018.
  */
 
-public class MainThread extends Thread {
+ /**
+  * Class which contains the logic for the game loop
+  */
+ public class MainThread extends Thread {
 
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
@@ -28,18 +31,29 @@ public class MainThread extends Thread {
 
     private boolean isSurfaceLocked = false;
 
+     /**
+      * Constructor class for the MainThread class
+      * @param surfaceHolder - surfaceHolder used to handle graphics
+      * @param gamePanel - object which takes care of most game and graphics related aspects
+      */
     MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel) {
         super();
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;
     }
 
+     /**
+      * Setter for the running boolean
+      * @param running - boolean to state whether the game loop is running
+      */
     public void setRunning(boolean running) {
         this.running = running;
     }
 
-    public boolean isSurfaceLocked() { return isSurfaceLocked; }
-
+     /**
+      * Game loop method responsible for calling the appropriate draw and update methods,
+      * locking the canvas and updating some variables such as time and FPS.
+      */
     @Override
     public void run() {
         int frameCount = 0;

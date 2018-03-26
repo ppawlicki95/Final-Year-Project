@@ -10,6 +10,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+/**
+ * Main Activity class containing the listeners to various buttons
+ * to navigate through the main menu of the application
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override

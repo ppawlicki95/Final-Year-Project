@@ -2,10 +2,6 @@ package baloons_gui.patrykpawlicki.balloonsgui;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Build;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -13,54 +9,51 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by Patryk Pawlicki on 28/02/2018.
  */
 
+/**
+ * Class responsible for managing the Balloon objects
+ */
 public class BalloonManager {
     private Context context;
     private CopyOnWriteArrayList<Balloon> balloons;
+    private SoundController soundController;
     private long startTime;
     private long spawnTime;
-    public int spawnRounds;
-    public long gameEndTime;
-
-    SoundPool snd;
-    int pop_sound, beep_sound, rainbow_sound;
+    private int spawnRounds;
+    private long gameEndTime;
 
     private static final String TAG = MainThread.class.getSimpleName();
 
+    /**
+     * Constructor for the Balloon Manager
+     * @param context - interface which allows access to resources and states
+     */
     public BalloonManager(Context context) {
         this.context = context;
         balloons = new CopyOnWriteArrayList<>();
+        soundController = new SoundController(context);
 
         startTime = System.currentTimeMillis();
         spawnTime = (int) (System.currentTimeMillis() - startTime) /1000;
         MainThread.score = 0;
         MainThread.lives = 3;
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            AudioAttributes aa = new AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_GAME)
-                    .build();
-
-            snd = new SoundPool.Builder()
-                    .setMaxStreams(10)
-                    .setAudioAttributes(aa)
-                    .build();
-            pop_sound = snd.load(context, R.raw.pop_sound, 1);
-            beep_sound = snd.load(context, R.raw.beep_sound, 1);
-            rainbow_sound = snd.load(context, R.raw.rainbow_sound, 1);
-        } else {
-            snd = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
-            pop_sound = snd.load(context, R.raw.pop_sound, 1);
-            beep_sound = snd.load(context, R.raw.beep_sound, 1);
-            rainbow_sound = snd.load(context, R.raw.rainbow_sound, 1);
-
-        }
     }
 
+    /**
+     * Getter for the size of the balloons list
+     * @return size of the balloons list
+     */
     public int getBalloonsListSize() {
         return balloons.size();
     }
 
+    /**
+     * Method used for the generation of new balloons and their addition to the list
+     * @param context - interface which allows access to resources and states
+     * @param x - X coordinate
+     * @param y - Y coordinate
+     * @param radius - circle objects radius that the balloon is based on
+     * @param elapsedTime - time elapsed since the start of the game
+     */
     public void generateBalloon(Context context, int x, int y, int radius, int elapsedTime) {
         if (elapsedTime <= 30) { spawnRounds = 1; }
         else if (elapsedTime > 30 && elapsedTime <= 60) { spawnRounds = 2; }
@@ -76,19 +69,31 @@ public class BalloonManager {
             balloons.add(new Balloon(context, BalloonType.STANDARD, x, y, radius, elapsedTime));
         }
     }
-    
+
+    /**
+     * Method for generating a random X coordinate within a specified range for balloon spawning
+     * @return Random X coordinate within a spawn area range
+     */
     public static int randX(){
         Random rand = new Random();
         int randomNum = rand.nextInt(MainThread.SCREEN_WIDTH - MainThread.SCREEN_WIDTH/10);
         return randomNum;
     }
 
+    /**
+     * Method for generating a random Y coordinate within a specified range for balloon spawning
+     * @return Random Y coordinate within a spawn area range
+     */
     public static int randY() {
         Random rand = new Random();
         int randomNum = rand.nextInt(MainThread.SCREEN_HEIGHT/4) + MainThread.SCREEN_HEIGHT + MainThread.SCREEN_HEIGHT/4;
         return randomNum;
     }
 
+    /**
+     * Update method responsible for updating the balloons as well as managing their
+     * spawning at the right time intervals
+     */
     public void update() {
         if (!MainThread.gameOver) {
             int elapsedTime = ((int) (System.currentTimeMillis() - startTime) / 1000);
@@ -113,6 +118,10 @@ public class BalloonManager {
         }
     }
 
+    /**
+     * Method responsible for drawing the balloons to the canvas
+     * @param canvas - surface that is being drawn on
+     */
     public void draw(Canvas canvas) {
         for(Balloon b : balloons) {
             if(b.isPopped() == false)
@@ -120,32 +129,47 @@ public class BalloonManager {
         }
     }
 
+    /**
+     * Method responsible for acting upon the touch even if collision occurs
+     * Updating score, lives as well as playing sounds
+     * @param x - X coordinate of the touch event
+     * @param y - Y coordinate of the touch event
+     */
     public void handleTouchEvent(float x, float y) {
         for (Balloon b : balloons) {
             if (b.handleTouchEvent(x, y) == true) {
                 if (b.isPopped() != true) {
                     if (b.getType() == BalloonType.BLACK) {
                         if (!MainThread.muted)
-                            snd.play(beep_sound, 1, 1, 1, 0, 1);
+                            soundController.snd.play(soundController.beep_sound,
+                                    1, 1, 1, 0, 1);
                         b.setTypeStandard();
                     } else if (b.getType() == BalloonType.RAINBOW) {
                         b.setPopped(true);
                         MainThread.score = MainThread.score + 20;
                         if (MainThread.lives < 3) {MainThread.lives++;}
                         if (!MainThread.muted)
-                            snd.play(rainbow_sound, 1, 1, 1, 0, 1);
+                            soundController.snd.play(soundController.rainbow_sound,
+                                    1, 1, 1, 0, 1);
                     } else {
                         MainThread.score++;
                         b.setPopped(true);
                         if (!MainThread.muted)
-                            snd.play(pop_sound, 1, 1, 1, 0, 1);
+                            soundController.snd.play(soundController.pop_sound,
+                                    1, 1, 1, 0, 1);
                     }
                 }
             }
         }
     }
 
+    /**
+     * Getter for the game start time
+     * @return Game start time in milliseconds
+     */
     public long getStartTime() {
         return startTime;
     }
+
+    public long getGameEndTime() { return gameEndTime; }
 }

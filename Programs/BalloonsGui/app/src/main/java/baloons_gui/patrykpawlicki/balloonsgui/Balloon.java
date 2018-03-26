@@ -12,6 +12,9 @@ import java.util.Random;
  * Created by Patryk Pawlicki on 02/02/2018.
  */
 
+/**
+ * Balloon game object class
+ */
 public class Balloon implements BalloonController {
 
     private Context context;
@@ -25,7 +28,8 @@ public class Balloon implements BalloonController {
 
     /**
      * Constructor for the balloon object.
-     * @param context - interface which allows access to resources and states, required for the object to work with the GameView.
+     * @param context - interface which allows access to resources and states
+     * @param type - enum to distinguish regular balloons with balloons with special effects
      * @param x - object X coordinate used for generating the circle which balloons are based on
      * @param y - object Y coordinate used for generating the circle which balloons are based on
      * @param radius - radius of the circle object corresponding to the balloon
@@ -42,6 +46,10 @@ public class Balloon implements BalloonController {
         popped = false;
     }
 
+    /**
+     * Class used for randomising and assigning colours to the appropriate balloons
+     * @return Balloon object bitmap
+     */
     public Bitmap setBalloonColour() {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_red);
 
@@ -200,15 +208,17 @@ public class Balloon implements BalloonController {
         this.popped = true;
     }
 
+    /**
+     * Getter for the balloon type enum
+     * @return Balloon type
+     */
     public BalloonType getType() {
         return type;
     }
 
-    public void setTypeBlack() {
-        type = BalloonType.BLACK;
-        setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_black));
-    }
-
+    /**
+     * Method used for setting the balloon type to standard as well as reassigning its bitmap
+     */
     public void setTypeStandard() {
         type = BalloonType.STANDARD;
         setBitmap(setBalloonColour());

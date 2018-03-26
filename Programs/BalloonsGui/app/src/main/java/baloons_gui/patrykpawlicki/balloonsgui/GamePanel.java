@@ -61,7 +61,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             balloonManager.draw(gameCanvas);
             drawGamePaint(gameCanvas);
         } else {
-            long timeInGameSeconds = (balloonManager.gameEndTime - balloonManager.getStartTime()) / 1000;
+            long timeInGameSeconds = (balloonManager.getGameEndTime() - balloonManager.getStartTime()) / 1000;
             String timeInGame = DateUtils.formatElapsedTime(timeInGameSeconds);
             drawGameOverPaint(gameCanvas, thread.score, timeInGame);
             updateHighscores(thread.score, timeInGame);
@@ -125,7 +125,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 newScore < highscores.highscore2 &&
                 newScore < highscores.highscore1) {
             highscores.highscore3 = newScore;
-            highscores.newtime1 = timeInGame;
+            highscores.newtime3 = timeInGame;
         }
         if (newScore > highscores.highscore2 &&
                 newScore < highscores.highscore1) {
