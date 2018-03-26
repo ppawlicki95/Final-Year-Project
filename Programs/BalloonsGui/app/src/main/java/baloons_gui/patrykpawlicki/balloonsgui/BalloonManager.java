@@ -2,17 +2,10 @@ package baloons_gui.patrykpawlicki.balloonsgui;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
-import android.provider.MediaStore;
-import android.util.Log;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -71,7 +64,6 @@ public class BalloonManager {
         for (int i = 0; i < spawnRounds; i++) {
             balloons.add(new Balloon(context, x, y, radius, elapsedTime));
         }
-
     }
     
     public static int randX(){

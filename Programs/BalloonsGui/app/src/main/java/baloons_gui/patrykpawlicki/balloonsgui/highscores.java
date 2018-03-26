@@ -38,6 +38,16 @@ public class highscores extends AppCompatActivity {
         final SharedPreferences preferences = this.getSharedPreferences("Scores", Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = preferences.edit();
 
+        if(highscore1 == 0) { //Import values from preferences if empty
+            highscore1 = preferences.getInt("highscore1", 0);
+            highscore2 = preferences.getInt("highscore2", 0);
+            highscore3 = preferences.getInt("highscore3", 0);
+
+            newtime1 = preferences.getString("time1", "0:00");
+            newtime2 = preferences.getString("time2", "0:00");
+            newtime3 = preferences.getString("time3", "0:00");
+        }
+
         editor.putInt("highscore1", highscore1);
         editor.putInt("highscore2", highscore2);
         editor.putInt("highscore3", highscore3);

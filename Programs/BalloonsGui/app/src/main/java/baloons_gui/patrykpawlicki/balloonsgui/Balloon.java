@@ -23,7 +23,6 @@ public class Balloon implements BalloonController {
 
     private int x, y;
     private int speed;
-    private int color;
     private boolean popped;
 
     /**
@@ -96,9 +95,6 @@ public class Balloon implements BalloonController {
      */
     @Override
     public void draw(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(color);
-
         canvas.drawBitmap(bitmap,
                 new Rect(0,0,bitmap.getWidth(),bitmap.getHeight()),
                 new Rect((circle.getX() - circle.radius),
@@ -123,9 +119,6 @@ public class Balloon implements BalloonController {
             }
             return collision;
     }
-
-    @Override
-    public void update() { }
 
     /**
      * Getter for the balloon bitmap

@@ -9,5 +9,4 @@ import android.graphics.Point;
 
 public interface BalloonController {
     public void draw(Canvas canvas);
-    public void update();
 }
