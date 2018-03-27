@@ -4,14 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
 
 public class SplashScreen extends Activity {
 
-    private final int splashScreenDuration = 1000;
+    private final int splashScreenDuration = 500;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splash_screen);
 
         new Handler().postDelayed(new Runnable(){
