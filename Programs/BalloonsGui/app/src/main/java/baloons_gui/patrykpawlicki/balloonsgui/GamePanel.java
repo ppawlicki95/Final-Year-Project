@@ -19,6 +19,7 @@ import android.view.SurfaceView;
  * all of the objects and text paint is called and updated from here
  */
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
+    //GamePanel structure written with the aid of a tutorial: https://www.youtube.com/watch?v=Rliwg0sELJo
 
     private static final String TAG = MainThread.class.getSimpleName();
     private MainThread thread;
@@ -62,17 +63,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     /**
      * Method responsible for drawing all of the objects and paint to the screen
-     * @param gameCanvas - the game canvas for the graphics
+     * @param gameCanvas - the Game canvas for the graphics
      */
     @Override
     public void draw(Canvas gameCanvas) {
         super.draw(gameCanvas);
         gameCanvas.drawColor(Color.rgb(140, 207, 255));
 
-        if (!MainThread.gameOver){
+        if (!MainThread.gameOver){ // if game in progress
             balloonManager.draw(gameCanvas);
             drawGamePaint(gameCanvas);
-        } else {
+        } else {                    // if game over
             long timeInGameSeconds = (balloonManager.getGameEndTime() - balloonManager.getStartTime()) / 1000;
             String timeInGame = DateUtils.formatElapsedTime(timeInGameSeconds);
             drawGameOverPaint(gameCanvas, thread.score, timeInGame);
@@ -104,8 +105,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     /**
-     * Method which contains all of the code responsible for drawing the game text paint
-     * such as the score, lives during the game
+     * Method which contains all of the code responsible for drawing the Game text paint
+     * such as the score, lives during the Game
      * @param canvas
      */
     public void drawGamePaint(Canvas canvas) {
@@ -125,8 +126,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     /**
-     * Method which contains all of the code responsible for drawing the game text paint
-     * such as the score or elapsed time after the player looses a game (Game over screen)
+     * Method which contains all of the code responsible for drawing the Game text paint
+     * such as the score or elapsed time after the player looses a Game (Game over screen)
      * @param canvas
      * @param score
      * @param timeInGame
@@ -152,39 +153,38 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     /**
-     * Method which updates the highscores table after a game if score is higher
-     * than the current highscores stored
+     * Method which updates the Highscores table after a Game if score is higher
+     * than the current Highscores stored
      * @param newScore
      * @param timeInGame
      */
     public void updateHighscores(int newScore, String timeInGame) {
-        if (newScore > highscores.highscore3 &&
-                newScore < highscores.highscore2 &&
-                newScore < highscores.highscore1) {
-            highscores.highscore3 = newScore;
-            highscores.newtime3 = timeInGame;
+        if (newScore > Highscores.highscore3 &&
+                newScore < Highscores.highscore2 &&
+                newScore < Highscores.highscore1) { // updating the 3rd high score and time
+            Highscores.highscore3 = newScore;
+            Highscores.newtime3 = timeInGame;
         }
-        if (newScore > highscores.highscore2 &&
-                newScore < highscores.highscore1) {
-            int tempScore = highscores.highscore2;
-            String tempTime = highscores.newtime2;
-            highscores.highscore2 = newScore;
-            highscores.newtime2 = timeInGame;
-            highscores.highscore3 = tempScore;
-            highscores.newtime3 = tempTime;
+        if (newScore > Highscores.highscore2 &&
+                newScore < Highscores.highscore1) { // updating the 2nd highscore and time
+            int tempScore = Highscores.highscore2;
+            String tempTime = Highscores.newtime2;
+            Highscores.highscore2 = newScore;
+            Highscores.newtime2 = timeInGame;
+            Highscores.highscore3 = tempScore;
+            Highscores.newtime3 = tempTime;
         }
-        if (newScore > highscores.highscore1) {
-            int tempScore = highscores.highscore1;
-            int tempScore2 = highscores.highscore2;
-            String tempTime = highscores.newtime1;
-            String tempTime2 = highscores.newtime2;
-            highscores.highscore1 = newScore;
-            highscores.newtime1 = timeInGame;
-            highscores.highscore2 = tempScore;
-            highscores.newtime2 = tempTime;
-            highscores.highscore3 = tempScore2;
-            highscores.newtime3 = tempTime2;
+        if (newScore > Highscores.highscore1) { // updating the 1st highscore and time
+            int tempScore = Highscores.highscore1;
+            int tempScore2 = Highscores.highscore2;
+            String tempTime = Highscores.newtime1;
+            String tempTime2 = Highscores.newtime2;
+            Highscores.highscore1 = newScore;
+            Highscores.newtime1 = timeInGame;
+            Highscores.highscore2 = tempScore;
+            Highscores.newtime2 = tempTime;
+            Highscores.highscore3 = tempScore2;
+            Highscores.newtime3 = tempTime2;
         }
     }
-
 }

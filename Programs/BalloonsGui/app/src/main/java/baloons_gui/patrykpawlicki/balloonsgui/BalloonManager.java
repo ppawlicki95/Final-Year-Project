@@ -14,6 +14,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class BalloonManager {
     private Context context;
+    //CopyOnWriteArrayList instead of regular ArrayList to avoid ConcurrentModificationException
+    //as the list gets modified whilst being iterated over
     private CopyOnWriteArrayList<Balloon> balloons;
     private SoundController soundController;
     private long startTime;
@@ -52,7 +54,7 @@ public class BalloonManager {
      * @param x - X coordinate
      * @param y - Y coordinate
      * @param radius - circle objects radius that the balloon is based on
-     * @param elapsedTime - time elapsed since the start of the game
+     * @param elapsedTime - time elapsed since the start of the Game
      */
     public void generateBalloon(Context context, int x, int y, int radius, int elapsedTime) {
         if (elapsedTime <= 30) { spawnRounds = 1; }
@@ -64,7 +66,8 @@ public class BalloonManager {
         } else if ((elapsedTime % 35 ==0)){
             balloons.add(new Balloon(context, BalloonType.RAINBOW, x, y, radius, elapsedTime));
         }
-
+        // Amount of iterations (effectively balloons spawned)
+        // based on elapsed time increasing as game progresses
         for (int i = 0; i < spawnRounds; i++) {
             balloons.add(new Balloon(context, BalloonType.STANDARD, x, y, radius, elapsedTime));
         }
@@ -97,13 +100,13 @@ public class BalloonManager {
     public void update() {
         if (!MainThread.gameOver) {
             int elapsedTime = ((int) (System.currentTimeMillis() - startTime) / 1000);
-            if (elapsedTime > spawnTime + 1) {
+            if (elapsedTime > spawnTime + 1) { // 1 second countdown between spawns
                 generateBalloon(context, randX(), randY(), MainThread.SCREEN_WIDTH/5, elapsedTime);
                 spawnTime++;
             }
             for (Balloon b : balloons) {
                 b.updatePosition(b.getSpeed());
-                if (b.getY() < 0 - b.getCircle().radius) {
+                if (b.getY() < 0 - b.getCircle().radius) { // if balloon goes outside the screen
                     if (b.isPopped() != true)
                         MainThread.lives--;
                     b.setPopped(true);
@@ -137,21 +140,21 @@ public class BalloonManager {
      */
     public void handleTouchEvent(float x, float y) {
         for (Balloon b : balloons) {
-            if (b.handleTouchEvent(x, y) == true) {
+            if (b.handleTouchEvent(x, y) == true) { // Balloon.Type.BLACK collision handler
                 if (b.isPopped() != true) {
                     if (b.getType() == BalloonType.BLACK) {
                         if (!MainThread.muted)
                             soundController.snd.play(soundController.beep_sound,
                                     1, 1, 1, 0, 1);
                         b.setTypeStandard();
-                    } else if (b.getType() == BalloonType.RAINBOW) {
+                    } else if (b.getType() == BalloonType.RAINBOW) { // Balloon.Type.RAINBOW collision handler
                         b.setPopped(true);
                         MainThread.score = MainThread.score + 20;
                         if (MainThread.lives < 3) {MainThread.lives++;}
                         if (!MainThread.muted)
                             soundController.snd.play(soundController.rainbow_sound,
                                     1, 1, 1, 0, 1);
-                    } else {
+                    } else { // Regular balloon collision handler
                         MainThread.score++;
                         b.setPopped(true);
                         if (!MainThread.muted)
@@ -164,7 +167,7 @@ public class BalloonManager {
     }
 
     /**
-     * Getter for the game start time
+     * Getter for the Game start time
      * @return Game start time in milliseconds
      */
     public long getStartTime() {

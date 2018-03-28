@@ -12,7 +12,7 @@ import android.widget.TextView;
 /**
  * Class responsible for displaying and updating the Highscores
  */
-public class highscores extends AppCompatActivity {
+public class Highscores extends AppCompatActivity {
 
     public static int highscore1, highscore2, highscore3;
     public static String newtime1, newtime2, newtime3;
@@ -46,6 +46,7 @@ public class highscores extends AppCompatActivity {
             newtime3 = preferences.getString("time3", "0:00");
         }
 
+        // Update the highscores and time in preferences
         editor.putInt("highscore1", highscore1);
         editor.putInt("highscore2", highscore2);
         editor.putInt("highscore3", highscore3);
@@ -54,6 +55,7 @@ public class highscores extends AppCompatActivity {
         editor.putString("time3", newtime3);
         editor.apply();
 
+        // Update the highscores and time in the UI
         score1.setText(String.valueOf(preferences.getInt("highscore1", 0)));
         score2.setText(String.valueOf(preferences.getInt("highscore2", 0)));
         score3.setText(String.valueOf(preferences.getInt("highscore3", 0)));
@@ -64,16 +66,16 @@ public class highscores extends AppCompatActivity {
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nav_main = new Intent(highscores.this, MainActivity.class);
-                highscores.this.finish();
+                Intent nav_main = new Intent(Highscores.this, MainActivity.class);
+                Highscores.this.finish();
                 startActivity(nav_main);
             }
         });
 
         reset_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                editor.clear();
+            public void onClick(View v) { // Reset button listener
+                editor.clear();              // clears the preferences and assigns default values
                 editor.commit();
                 score1.setText(String.valueOf(preferences.getInt("highscore1", 0)));
                 score2.setText(String.valueOf(preferences.getInt("highscore2", 0)));

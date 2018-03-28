@@ -1,7 +1,6 @@
 package baloons_gui.patrykpawlicki.balloonsgui;
 
 import android.content.Intent;
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -43,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         shop_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent nav_shop = new Intent(MainActivity.this, highscores.class);
-                startActivity(nav_shop);
+                Intent nav_highscores = new Intent(MainActivity.this, Highscores.class);
+                startActivity(nav_highscores);
             }
         });
 
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         start_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent nav_game = new Intent(MainActivity.this, game.class);
+                Intent nav_game = new Intent(MainActivity.this, Game.class);
                 MainThread.gameOver = false;
                 startActivity(nav_game);
             }

@@ -8,16 +8,17 @@
  */
 
  /**
-  * Class which contains the logic for the game loop
+  * Class which contains the logic for the Game loop
   */
  public class MainThread extends Thread {
-
+     //Game loop code has been based on a tutorial I found:
+     // https://www.youtube.com/watch?v=OojQitoAEXs&t=5s
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
 
     public static int score = 0;
     public static int lives = 3;
-    public static boolean muted = false;
+    public static boolean muted = false; // muted button status
 
     private static final String TAG = MainThread.class.getSimpleName();
 
@@ -34,7 +35,7 @@
      /**
       * Constructor class for the MainThread class
       * @param surfaceHolder - surfaceHolder used to handle graphics
-      * @param gamePanel - object which takes care of most game and graphics related aspects
+      * @param gamePanel - object which takes care of most Game and graphics related aspects
       */
     MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel) {
         super();
@@ -44,7 +45,7 @@
 
      /**
       * Setter for the running boolean
-      * @param running - boolean to state whether the game loop is running
+      * @param running - boolean to state whether the Game loop is running
       */
     public void setRunning(boolean running) {
         this.running = running;
@@ -64,7 +65,7 @@
         long targetTime = 1000 / maxFPS;
         long loopcount = 0L;
 
-        //Log.d(TAG, "Starting game loop");
+        //Log.d(TAG, "Starting Game loop");
 
         while (running) {
             startTime = System.nanoTime();
@@ -72,18 +73,18 @@
             loopcount++;
 
             try {
-                gameCanvas = this.surfaceHolder.lockCanvas();
+                gameCanvas = this.surfaceHolder.lockCanvas(); // lock canvas to implement UI changes
                 isSurfaceLocked = true;
                 synchronized (surfaceHolder) {
-                    this.gamePanel.update();
-                    gamePanel.draw(gameCanvas);
+                    this.gamePanel.update();    // update the screen
+                    gamePanel.draw(gameCanvas); // draw on screen
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 if (gameCanvas != null) {
                     try {
-                        surfaceHolder.unlockCanvasAndPost(gameCanvas);
+                        surfaceHolder.unlockCanvasAndPost(gameCanvas); // implement changes
                         isSurfaceLocked = false;
                     } catch (Exception e) {
                         e.printStackTrace();

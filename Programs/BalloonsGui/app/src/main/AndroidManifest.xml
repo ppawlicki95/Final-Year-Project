@@ -29,12 +29,12 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".highscores"
+            android:name=".Highscores"
             android:label="highscores"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".game"
+            android:name=".Game"
             android:label="game"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 

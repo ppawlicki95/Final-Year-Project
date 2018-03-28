@@ -13,9 +13,11 @@ import java.util.Random;
  */
 
 /**
- * Balloon game object class
+ * Balloon Game object class
  */
 public class Balloon implements BalloonController {
+    // balloon bitmap src:
+    // http://www.ballooncity.com.ar/Globo%20latex%2012%C2%B4%C2%B4%20Balloon%20Per.%20Rojo%20(Suelto)
 
     private Context context;
     private Circle circle;
@@ -33,13 +35,14 @@ public class Balloon implements BalloonController {
      * @param x - object X coordinate used for generating the circle which balloons are based on
      * @param y - object Y coordinate used for generating the circle which balloons are based on
      * @param radius - radius of the circle object corresponding to the balloon
-     * @param elapsedTime - elapsed time since the start of the game
+     * @param elapsedTime - elapsed time since the start of the Game
      */
     public Balloon(Context context, BalloonType type, int x, int y, int radius, int elapsedTime) {
         this.context = context;
         this.type = type;
         bitmap = setBalloonColour();
         circle = new Circle(x, y, radius);
+        //Speed = base speed + time based speed + randomSpeed(rnd boundaries increasing with time)
         this.speed = 20 + elapsedTime/4 + randSpeed(elapsedTime);
         this.x = x;
         this.y = y;
@@ -91,7 +94,7 @@ public class Balloon implements BalloonController {
 
     /**
      * Method for generating a random movement speed for the balloon object.
-     * @param elapsedTime - time elapsed since the start of the game
+     * @param elapsedTime - time elapsed since the start of the Game
      * @return randomSpeed integer
      */
     public static int randSpeed(int elapsedTime){

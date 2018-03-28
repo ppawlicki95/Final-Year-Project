@@ -8,7 +8,7 @@ import android.view.WindowManager;
 /**
  * Game Activity class, sets the content view to GamePanel which takes care of the graphics.
  */
-public class game extends Activity {
+public class Game extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

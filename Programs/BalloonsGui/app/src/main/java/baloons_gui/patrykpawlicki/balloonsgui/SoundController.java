@@ -11,15 +11,17 @@ import android.os.Build;
  */
 
 /**
- * Class responsible for the sounds used by the game
+ * Class responsible for the sounds used by the Game
  */
 public class SoundController {
 
     SoundPool snd;
-    int pop_sound, beep_sound, rainbow_sound;
+    int pop_sound;      // Sound source: https://freesound.org/people/Gniffelbaf/sounds/82121/
+    int beep_sound;     // Sound source: https://freesound.org/people/IndigoRay/sounds/339133/
+    int rainbow_sound;  // Sound source: https://freesound.org/people/kibilocomalifasa/sounds/214666/
 
     /**
-     * SoundController constructor. Sets up a new SoundPool to be used by the in game sound effects.
+     * SoundController constructor. Sets up a new SoundPool to be used by the in Game sound effects.
      * @param context - interface which allows access to resources and states
      */
     public SoundController(Context context) {
